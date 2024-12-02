@@ -1,7 +1,7 @@
 ﻿class Day1
 {
 
-    public static void Main()
+    public static void Main1()
     {
         var input = _input.Split("\r\n")
         .Select(i => i.Split(" "))
