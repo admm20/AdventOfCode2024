@@ -3,7 +3,7 @@
 class Day3
 {
 
-    public static void Main()
+    public static void Main1()
     {
         {
             var mulRegex = new Regex(@"mul\((\d+),(\d+)\)");
