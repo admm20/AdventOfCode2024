@@ -104,7 +104,7 @@
         return countMAS == 2 ? 1 : 0;
     }
 
-    public static void Main()
+    public static void Main1()
     {
         var table = StringTo2DArray(_input);
 
