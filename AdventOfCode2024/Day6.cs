@@ -140,7 +140,6 @@ class Day6
             var direction = Dir.Up;
             var loopCount = 0;
 
-            var debugCount = 0;
             for (int row = 0; row < map.Length; row++)
             {
                 for (int col = 0; col < map[row].Length; col++)
@@ -158,15 +157,6 @@ class Day6
                     // do magic
                     while (true)
                     {
-                        debugCount++;
-
-                        if (debugCount > 10_000_000)
-                        {
-                            Console.WriteLine($"row: {row} col: {col}");
-                            DumpMap(map);
-                            Debugger.Break();
-                        }
-
                         var nextRow = position.row;
                         var nextCol = position.col;
 
@@ -211,59 +201,21 @@ class Day6
                             {
                                 map[position.row][position.col] = '+';
                             }
-                            //Console.WriteLine($"Rotate into {Enum.GetName(typeof(Dir), direction)}");
+
                             continue;
                         }
 
-                        // Move 
-                        //Console.WriteLine($"Go to row:{nextRow} col:{nextCol}");
-
-                        //if (direction == Dir.Right || direction == Dir.Left)
-                        //{
-                        //    //var currentChar = map[position.row][position.col];
-                        //    //if (currentChar == '|' || currentChar == '+')
-                        //    //{
-                        //    //    map[position.row][position.col] = '+';
-                        //    //}
-                        //    //else
-                        //    //{
-                        //    //    map[position.row][position.col] = '-';
-                        //    //}
-                        //}
-                        //else if (direction == Dir.Up || direction == Dir.Down)
-                        //{
-                        //    //var currentChar = map[position.row][position.col];
-                        //    //if (currentChar == '-' || currentChar == '+')
-                        //    //{
-                        //    //    map[position.row][position.col] = '+';
-                        //    //}
-                        //    //else
-                        //    //{
-                        //    //    map[position.row][position.col] = '|';
-                        //    //}
-                        //}
-
                         // Detect loop
-                        if (map[nextRow][nextCol] == 'O'
-                        )
+                        if (map[nextRow][nextCol] == 'O')
                         {
                             loopCount++;
-
-                            //Console.WriteLine($"row: {row} col: {col}");
-                            //DumpMap(map);
-                            //Console.WriteLine();
-                            //Console.WriteLine();
-                            //Console.WriteLine();
-
                             break;
                         }
 
+                        // Mark existing rotation as 2nd rotation ('O')
                         if (map[nextRow][nextCol] == '+')
                         {
                             map[nextRow][nextCol] = 'O';
-                            
-                            //if (row == 6 && col == 3)
-                            //    debugCount = 100000000;
                         }
 
                         position.row = nextRow;
@@ -274,7 +226,6 @@ class Day6
                     map[row][col] = prevElement;
                     direction = Dir.Up;
                     position = startPosition;
-                    debugCount = 0;
                 }
             }
 
