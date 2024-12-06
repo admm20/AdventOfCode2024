@@ -7,7 +7,7 @@
         list[indexB] = tmp;
     }
 
-    public static void Main()
+    public static void Main1()
     {
         var rules = _orders
             .Split("\r\n")
