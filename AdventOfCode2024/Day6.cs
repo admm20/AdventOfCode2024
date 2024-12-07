@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-
-class Day6
+﻿class Day6
 {
     public enum Dir
     {
@@ -68,7 +66,7 @@ class Day6
         return res;
     }
 
-    public static void Main()
+    public static void Main1()
     {
         // part 1
         {
