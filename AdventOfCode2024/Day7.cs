@@ -19,76 +19,151 @@ class Day7
     public static void Main()
     {
         var inputs = ParseInput(_input);
-        var validInputs = 0L;
 
-        foreach (var input in inputs)
+        // part 1
         {
-            // 1 1 = 2 combinations
-            // 1 1 1 = 4 combinations
-            // 1 1 1 1 = 8 combinations
-            // 1 1 1 1 1 = 16 combinations
-            // 2^N
-            /*
-             * +++
-             * +*+
-             * ++*
-             * +**
-             * ***
-             * **+
-             * *+*
-             * *++
-             * 
-             * ++++
-             * +++*
-             * ++*+
-             * ++**
-             * +*++
-             * +*+*
-             * +**+
-             * +***
-             */
+            var validInputs = 0L;
 
-            // 0 = add
-            // 1 = multiply
-
-            var combinationLength = input.Operations.Count - 1;
-            var combinations = Math.Pow(2, combinationLength);
-
-            for (int i = 0; i < combinations; i++)
+            foreach (var input in inputs)
             {
-                var mask = Convert.ToString(i, 2);
-                
-                // prepend missing zeros
-                while(mask.Length != combinationLength)
-                {
-                    mask = "0" + mask;
-                }
+                // 1 1 = 2 combinations
+                // 1 1 1 = 4 combinations
+                // 1 1 1 1 = 8 combinations
+                // 1 1 1 1 1 = 16 combinations
+                // 2^N
+                /*
+                 * +++
+                 * +*+
+                 * ++*
+                 * +**
+                 * ***
+                 * **+
+                 * *+*
+                 * *++
+                 * 
+                 * ++++
+                 * +++*
+                 * ++*+
+                 * ++**
+                 * +*++
+                 * +*+*
+                 * +**+
+                 * +***
+                 */
 
-                // calculate
-                var result = input.Operations[0];
-                foreach (var number in input.Operations.Skip(1))
+                // 0 = add
+                // 1 = multiply
+
+                var combinationLength = input.Operations.Count - 1;
+                var combinations = Math.Pow(2, combinationLength);
+
+                for (int i = 0; i < combinations; i++)
                 {
-                    if (mask[0] == '0')
+                    var mask = Convert.ToString(i, 2);
+
+                    // prepend missing zeros
+                    while (mask.Length != combinationLength)
                     {
-                        result += number;
+                        mask = "0" + mask;
                     }
-                    else
+
+                    // calculate
+                    var result = input.Operations[0];
+                    foreach (var number in input.Operations.Skip(1))
                     {
-                        result *= number;
+                        if (mask[0] == '0')
+                        {
+                            result += number;
+                        }
+                        else
+                        {
+                            result *= number;
+                        }
+
+                        mask = mask.Remove(0, 1);
                     }
 
-                    mask = mask.Remove(0, 1);
-                }
-
-                if (result == input.Total)
-                {
-                    validInputs += input.Total;
-                    break;
+                    if (result == input.Total)
+                    {
+                        validInputs += input.Total;
+                        break;
+                    }
                 }
             }
+
+            Console.WriteLine(validInputs);
         }
 
-        Console.WriteLine(validInputs);
+        // part 2
+        {
+            var validInputs = 0L;
+
+            foreach (var input in inputs)
+            {
+                var combinationLength = input.Operations.Count - 1;
+                var combinations = (int)Math.Pow(3, combinationLength);
+                var masks = Enumerable.Range(0, combinations)
+                    .Select(s => "")
+                    .ToList();
+
+                // create masks
+                for (int i = 0; i < combinationLength; i++)
+                {
+                    var repeat = Math.Pow(3, i);
+                    var repeatCount = 0;
+                    var sign = 0; // 0 = +, 1 = *, 2 = ||
+                    for (int j = 0; j < masks.Count; j++)
+                    {
+                        masks[j] = sign + masks[j];
+                        repeatCount++;
+
+                        if (repeatCount == repeat)
+                        {
+                            repeatCount = 0;
+                            sign++;
+                            if (sign > 2)
+                            {
+                                sign = 0;
+                            }
+                        }
+                    }
+                }
+
+                // combine combinations with masks
+                for (int i = 0; i < combinations; i++)
+                {
+                    var mask = masks[i];
+
+                    // calculate
+                    var result = input.Operations[0];
+                    foreach (var number in input.Operations.Skip(1))
+                    {
+                        if (mask[0] == '0')
+                        {
+                            result += number;
+                        }
+                        else if (mask[0] == '1')
+                        {
+                            result *= number;
+                        }
+                        else
+                        {
+                            result = long.Parse(result + "" + number);
+                        }
+
+                        mask = mask.Remove(0, 1);
+                    }
+
+                    if (result == input.Total)
+                    {
+                        validInputs += input.Total;
+                        break;
+                    }
+                }
+            }
+
+            Console.WriteLine(validInputs);
+        }
     }
 
     private const string _test =
